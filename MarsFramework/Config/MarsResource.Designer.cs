@@ -70,7 +70,16 @@ namespace MarsFramework.Config {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to your path.
+        ///   Looks up a localized string similar to http://192.168.99.100:5000.
+        /// </summary>
+        internal static string DockerPath {
+            get {
+                return ResourceManager.GetString("DockerPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MarsFramework\ExcelData\TestData.xlsx.
         /// </summary>
         internal static string ExcelPath {
             get {

@@ -1,5 +1,7 @@
-﻿using OpenQA.Selenium;
+﻿using MarsFramework.Global;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+using System.Threading;
 
 namespace MarsFramework.Pages
 {
@@ -38,9 +40,25 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "//form/div[5]/div[@class='twelve wide column']/div/div[@class='field']")]
         private IWebElement ServiceTypeOptions { get; set; }
 
+        //Find Service type one-off
+        [FindsBy(How = How.XPath, Using = ".//input[@name='serviceType'][@value='1']")]
+        private IWebElement ServiceOneOff { get; set; }
+
+        //Find Service type one-off
+        [FindsBy(How = How.XPath, Using = ".//input[@name='serviceType'][@value='0']")]
+        private IWebElement ServiceHourly { get; set; }
+
         //Select the Location Type
         [FindsBy(How = How.XPath, Using = "//form/div[6]/div[@class='twelve wide column']/div/div[@class = 'field']")]
         private IWebElement LocationTypeOption { get; set; }
+
+        //Select On-site for location
+        [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[6]/div[2]/div/div[1]/div/input")]
+        private IWebElement LocationOnSite { get; set; }
+
+        //Select Online for location
+        [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[6]/div[2]/div/div[2]/div/input")]
+        private IWebElement LocationOnline { get; set; }
 
         //Click on Start Date dropdown
         [FindsBy(How = How.Name, Using = "startDate")]
@@ -54,21 +72,29 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "//body/div/div/div[@id='service-listing-section']/div[@class='ui container']/div[@class='listing']/form[@class='ui form']/div[7]/div[2]/div[1]")]
         private IWebElement Days { get; set; }
 
+        //select monDay check box
+        [FindsBy(How = How.XPath, Using = ".//input[@index='1'][@type='checkbox']")]
+        private IWebElement DayMon { get; set; }
+
         //Storing the starttime
         [FindsBy(How = How.XPath, Using = "//div[3]/div[2]/input[1]")]
         private IWebElement StartTime { get; set; }
 
         //Click on StartTime dropdown
-        [FindsBy(How = How.XPath, Using = "//div[3]/div[2]/input[1]")]
+        [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[7]/div[2]/div/div[3]/div[2]/input")]
         private IWebElement StartTimeDropDown { get; set; }
 
         //Click on EndTime dropdown
-        [FindsBy(How = How.XPath, Using = "//div[3]/div[3]/input[1]")]
+        [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[7]/div[2]/div/div[3]/div[3]/input")]
         private IWebElement EndTimeDropDown { get; set; }
 
         //Click on Skill Trade option
         [FindsBy(How = How.XPath, Using = "//form/div[8]/div[@class='twelve wide column']/div/div[@class = 'field']")]
         private IWebElement SkillTradeOption { get; set; }
+
+        //Select Skill Exchange 
+        [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[8]/div[2]/div/div[1]/div/input")]
+        private IWebElement SkillExchangeTrade { get; set; }
 
         //Enter Skill Exchange
         [FindsBy(How = How.XPath, Using = "//div[@class='form-wrapper']//input[@placeholder='Add new tag']")]
@@ -80,15 +106,84 @@ namespace MarsFramework.Pages
 
         //Click on Active/Hidden option
         [FindsBy(How = How.XPath, Using = "//form/div[10]/div[@class='twelve wide column']/div/div[@class = 'field']")]
+        private IWebElement Active { get; set; }
+        
+        //Click on Active
+        [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[10]/div[2]/div/div[1]/div/input")]
         private IWebElement ActiveOption { get; set; }
 
         //Click on Save button
         [FindsBy(How = How.XPath, Using = "//input[@value='Save']")]
         private IWebElement Save { get; set; }
 
-        internal void EnterShareSkill()
+        //Function to navigate Shareskill Page
+        internal void GoToShareSkill()
         {
+            ShareSkillButton.Click();
+        }
+        internal void InputText(int dataRow)
+        {
+            //Enter all details
+            Title.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Title"));
+            Description.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Description"));
 
+        }
+
+        internal void InputDetails(int dataRow)
+        {
+            CategoryDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Category"));
+            SubCategoryDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "SubCategory"));
+            Tags.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Tags"));
+            Tags.SendKeys(Keys.Enter);
+        }
+
+        internal void clickRadioBtn(int dataRow)
+        {
+            string serviceType = GlobalDefinitions.ExcelLib.ReadData(dataRow, "ServiceType");
+            if (serviceType == "One-off service")
+            {
+                ServiceOneOff.Click();
+            }
+            else
+            {
+                ServiceHourly.Click();
+            }
+
+            string LocationType = GlobalDefinitions.ExcelLib.ReadData(dataRow, "LocationType");
+            if ( LocationType == "On-site")
+            {
+                LocationOnSite.Click();
+            }
+            else
+            {
+                LocationOnline.Click();
+            }
+        }
+
+        internal void AddDayTimeDetails(int dataRow)
+        {
+            StartDateDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Startdate") + Keys.Enter);
+            EndDateDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Enddate") + Keys.Enter);
+            DayMon.Click();
+            StartTimeDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Starttime") + Keys.Enter);
+            EndTimeDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Endtime") + Keys.Enter);
+            SkillExchangeTrade.Click();
+            SkillExchange.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Skill-Exchange") + Keys.Enter);
+            ActiveOption.Click();
+        }
+
+        internal void EnterShareSkill(int dataRow)
+        {
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "SkillDetails");
+            InputText(dataRow);
+
+            InputDetails(dataRow);
+
+            clickRadioBtn(dataRow);
+            AddDayTimeDetails(dataRow);            
+            Save.Click();
+
+            Thread.Sleep(5000);
         }
 
         internal void EditShareSkill()

@@ -121,8 +121,11 @@
     <value>2</value>
     <comment>1 for firefox and 2 for Chrome</comment>
   </data>
+  <data name="DockerPath" xml:space="preserve">
+    <value>http://192.168.99.100:5000</value>
+  </data>
   <data name="ExcelPath" xml:space="preserve">
-    <value>your path</value>
+    <value>MarsFramework\ExcelData\TestData.xlsx</value>
   </data>
   <data name="IsLogin" xml:space="preserve">
     <value>true</value>

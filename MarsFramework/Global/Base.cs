@@ -14,9 +14,10 @@ namespace MarsFramework.Global
         #region To access Path from resource file
 
         public static int Browser = Int32.Parse(MarsResource.Browser);
-        public static String ExcelPath = MarsResource.ExcelPath;
+        public static String ExcelPath = "D:\\Automation\\MarsProject\\marsframework\\MarsFramework\\ExcelData\\TestData.xlsx";
         public static string ScreenshotPath = MarsResource.ScreenShotPath;
         public static string ReportPath = MarsResource.ReportPath;
+        public static string DockerPath = "http://192.168.99.100:5000";
         #endregion
 
         #region reports
@@ -25,7 +26,7 @@ namespace MarsFramework.Global
         #endregion
 
         #region setup and tear down
-        [SetUp]
+        [OneTimeSetUp]
         public void Inititalize()
         {
 
@@ -43,6 +44,8 @@ namespace MarsFramework.Global
 
             }
 
+            // Navigate to Mars URL
+            GlobalDefinitions.driver.Navigate().GoToUrl(Base.DockerPath);
             #region Initialise Reports
 
             extent = new ExtentReports(ReportPath, false, DisplayOrder.NewestFirst);
@@ -62,19 +65,29 @@ namespace MarsFramework.Global
             }
 
         }
+        [SetUp]
+        public void SetUp()
+        {
+            ////check the url of chrome
+            //if(GlobalDefinitions.driver.Url != Base.DockerPath)
+            //{
+            //    GlobalDefinitions.driver.Navigate().GoToUrl("http://192.168.99.100:5000");
+             
+            //}
+        }
 
 
         [TearDown]
         public void TearDown()
         {
-            // Screenshot
-            String img = SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report");//AddScreenCapture(@"E:\Dropbox\VisualStudio\Projects\Beehive\TestReports\ScreenShots\");
-            test.Log(LogStatus.Info, "Image example: " + img);
-            // end test. (Reports)
-            extent.EndTest(test);
-            // calling Flush writes everything to the log file (Reports)
-            extent.Flush();
-            // Close the driver :)            
+            //// Screenshot
+            //String img = SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report");//AddScreenCapture(@"E:\Dropbox\VisualStudio\Projects\Beehive\TestReports\ScreenShots\");
+            //test.Log(LogStatus.Info, "Image example: " + img);
+            //// end test. (Reports)
+            //extent.EndTest(test);
+            //// calling Flush writes everything to the log file (Reports)
+            //extent.Flush();
+            //// Close the driver :)            
             GlobalDefinitions.driver.Close();
             GlobalDefinitions.driver.Quit();
         }

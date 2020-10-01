@@ -1,5 +1,7 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+using System.Threading;
 
 namespace MarsFramework
 {
@@ -159,12 +161,13 @@ namespace MarsFramework
         //Click on Save Button
         [FindsBy(How = How.XPath, Using = "//*[@id='account-profileEdit-section']/div/section[2]/div/div/div/form/div[8]/div/div[4]/span/button[1]")]
         private IWebElement Save { get; set; }
-
+                
         #endregion
 
         internal void EditProfile()
         {
-
         }
+
+        
     }
 }

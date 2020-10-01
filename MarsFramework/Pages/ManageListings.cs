@@ -1,6 +1,8 @@
 ﻿using MarsFramework.Global;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+using System.Threading;
 
 namespace MarsFramework.Pages
 {
@@ -10,7 +12,7 @@ namespace MarsFramework.Pages
         {
             PageFactory.InitElements(Global.GlobalDefinitions.driver, this);
         }
-
+        #region Initialize Web Elements
         //Click on Manage Listings Link
         [FindsBy(How = How.LinkText, Using = "Manage Listings")]
         private IWebElement manageListingsLink { get; set; }
@@ -31,12 +33,38 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "//div[@class='actions']")]
         private IWebElement clickActionsButton { get; set; }
 
+        //Check for Title in manage list
+        [FindsBy(How = How.XPath, Using = "//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr/td[3]")]
+        private IWebElement getTitle { get; set; }
+        #endregion
+
+        //Function to navigate Manage Listing Page
+        internal void GoToManageList()
+        {
+            manageListingsLink.Click();
+            Thread.Sleep(5000);
+        }
         internal void Listings()
         {
             //Populate the Excel Sheet
             GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "ManageListings");
 
 
+        }
+
+        //Function to check whether record is added
+        internal void CheckRecordAdded()
+        {
+            //expected String
+            string expectedText = "Selenium";
+            //Get String from the Web Page
+            string actualText = getTitle.Text;
+
+            if ( expectedText == actualText)
+            {
+                //Throw exception when it false
+                Assert.IsTrue(true);
+            }
         }
     }
 }
