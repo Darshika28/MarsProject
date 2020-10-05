@@ -1,7 +1,10 @@
 ﻿using MarsFramework.Global;
+using MongoDB.Bson.Serialization.Serializers;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace MarsFramework.Pages
@@ -25,9 +28,17 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "//table[1]/tbody[1]")]
         private IWebElement delete { get; set; }
 
+        //Delete the listing
+        [FindsBy(How = How.XPath, Using = "//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr/td[8]/div/button[3]/i")]
+        private IWebElement deleteBtn { get; set; }
+
+        //Click yes on alert button
+        [FindsBy(How = How.XPath, Using = "/html/body/div[2]/div/div[3]/button[2]")]
+        private IWebElement AlertYes { get; set; }
+
         //Edit the listing
         [FindsBy(How = How.XPath, Using = "(//i[@class='outline write icon'])[1]")]
-        private IWebElement edit { get; set; }
+        private IWebElement editBtn { get; set; }
 
         //Click on Yes or No
         [FindsBy(How = How.XPath, Using = "//div[@class='actions']")]
@@ -36,11 +47,33 @@ namespace MarsFramework.Pages
         //Check for Title in manage list
         [FindsBy(How = How.XPath, Using = "//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr/td[3]")]
         private IWebElement getTitle { get; set; }
+        
+        //
+        [FindsBy(How = How.XPath, Using = "//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/thead/tr/th[3]")]
+        private IList<IWebElement> CheckRow { get; set; }
         #endregion
+
+        //Function to check if record is exist
+        internal void DeleteRecordIfExist(int dataRow)
+        {
+            //Get Title From Excel to check record
+            string getTitle = GlobalDefinitions.ExcelLib.ReadData(dataRow, "Title");
+            int row = CheckRow.Count();
+            for (int i = 1; i <= row; i++)
+            {
+               // string CheckString = CheckRow[i];
+              /*  if (CheckString == getTitle)
+                {
+                   
+                } */
+            }
+        }
+
 
         //Function to navigate Manage Listing Page
         internal void GoToManageList()
         {
+            Thread.Sleep(2000);
             manageListingsLink.Click();
             Thread.Sleep(5000);
         }
@@ -53,16 +86,48 @@ namespace MarsFramework.Pages
         }
 
         //Function to check whether record is added
-        internal void CheckRecordAdded()
+        internal void CheckRecordAdded(int dataRow)
         {
-            //expected String
-            string expectedText = "Selenium";
-            //Get String from the Web Page
-            string actualText = getTitle.Text;
-
-            if ( expectedText == actualText)
+            //Initialize Excel file
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "SkillDetails");
+            string actualText = GlobalDefinitions.ExcelLib.ReadData(dataRow, "Title");
+            if ( getTitle.Text == actualText)
             {
                 //Throw exception when it false
+                Assert.IsTrue(true);
+            }
+        }
+
+        internal void ClickOnEditBtn()
+        {
+            editBtn.Click();
+        }
+
+        internal void CheckRecordEdited(int dataRow)
+        {
+            //Initialize Excel file
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "SkillDetails");
+            string actualText = GlobalDefinitions.ExcelLib.ReadData(dataRow, "Title");
+            if (getTitle.Text == actualText)
+            {
+                Assert.IsTrue(true);
+            }
+        }
+
+        internal void ClickOnDeleteBtn()
+        {
+            deleteBtn.Click();
+            Thread.Sleep(2000);
+            AlertYes.Click();
+        }
+
+        internal void CheckRecordDeleted(int dataRow)
+        {
+            //Initialize Excel file
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "SkillDetails");
+            string actualText = GlobalDefinitions.ExcelLib.ReadData(dataRow, "Title");
+            if (getTitle.Text != actualText)
+            {
                 Assert.IsTrue(true);
             }
         }

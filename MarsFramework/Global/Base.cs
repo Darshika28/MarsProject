@@ -87,7 +87,7 @@ namespace MarsFramework.Global
             //extent.EndTest(test);
             //// calling Flush writes everything to the log file (Reports)
             //extent.Flush();
-            //// Close the driver :)            
+            // Close the driver :)            
             GlobalDefinitions.driver.Close();
             GlobalDefinitions.driver.Quit();
         }

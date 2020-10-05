@@ -1,6 +1,11 @@
 ﻿using MarsFramework.Global;
+using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Threading;
 
 namespace MarsFramework.Pages
@@ -94,11 +99,21 @@ namespace MarsFramework.Pages
 
         //Select Skill Exchange 
         [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[8]/div[2]/div/div[1]/div/input")]
-        private IWebElement SkillExchangeTrade { get; set; }
+        private IWebElement SkillTradeExchange { get; set; }
+
+        //Select Credit for skill exchange
+        [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[8]/div[2]/div/div[2]/div/input")]
+        private IWebElement SkillTradeCredit { get; set; }
+
+        //*[@id="service-listing-section"]/div[2]/div/form/div[8]/div[4]/div/div/div/div/span
 
         //Enter Skill Exchange
         [FindsBy(How = How.XPath, Using = "//div[@class='form-wrapper']//input[@placeholder='Add new tag']")]
         private IWebElement SkillExchange { get; set; }
+
+        //Enter Delete Skill Exchange
+        [FindsBy(How = How.XPath, Using = "//div[@class='form-wrapper']//input[@placeholder='Add new tag']")]
+        private IWebElement DeleteSkillExchange { get; set; }
 
         //Enter the amount for Credit
         [FindsBy(How = How.XPath, Using = "//input[@placeholder='Amount']")]
@@ -116,6 +131,8 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "//input[@value='Save']")]
         private IWebElement Save { get; set; }
 
+       
+
         //Function to navigate Shareskill Page
         internal void GoToShareSkill()
         {
@@ -124,7 +141,9 @@ namespace MarsFramework.Pages
         internal void InputText(int dataRow)
         {
             //Enter all details
+            Title.Clear();
             Title.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Title"));
+            Description.Clear();
             Description.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Description"));
 
         }
@@ -133,8 +152,7 @@ namespace MarsFramework.Pages
         {
             CategoryDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Category"));
             SubCategoryDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "SubCategory"));
-            Tags.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Tags"));
-            Tags.SendKeys(Keys.Enter);
+            Tags.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Tags") + Keys.Enter);
         }
 
         internal void clickRadioBtn(int dataRow)
@@ -167,7 +185,7 @@ namespace MarsFramework.Pages
             DayMon.Click();
             StartTimeDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Starttime") + Keys.Enter);
             EndTimeDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Endtime") + Keys.Enter);
-            SkillExchangeTrade.Click();
+            SkillTradeExchange.Click();
             SkillExchange.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Skill-Exchange") + Keys.Enter);
             ActiveOption.Click();
         }
@@ -175,6 +193,7 @@ namespace MarsFramework.Pages
         internal void EnterShareSkill(int dataRow)
         {
             GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "SkillDetails");
+            Thread.Sleep(3000);
             InputText(dataRow);
 
             InputDetails(dataRow);
@@ -182,13 +201,27 @@ namespace MarsFramework.Pages
             clickRadioBtn(dataRow);
             AddDayTimeDetails(dataRow);            
             Save.Click();
-
-            Thread.Sleep(5000);
         }
 
-        internal void EditShareSkill()
+        internal void EditDetails(int dataRow)
         {
-
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "SkillDetails");
+            SkillTradeCredit.Click();
+            CreditAmount.Clear();
+            CreditAmount.SendKeys(GlobalDefinitions.ExcelLib.ReadData(3, "Credit"));
         }
+
+        internal void EditShareSkill(int dataRow)
+        {
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "SkillDetails");
+            Thread.Sleep(5000);
+            InputText(dataRow);
+            Thread.Sleep(2000);
+            InputDetails(dataRow);
+            EditDetails(dataRow);
+            Save.Click();
+        }
+
+       
     }
 }
