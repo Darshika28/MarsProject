@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading;
+using AutoItX3Lib;
 
 namespace MarsFramework.Pages
 {
@@ -105,8 +106,6 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[8]/div[2]/div/div[2]/div/input")]
         private IWebElement SkillTradeCredit { get; set; }
 
-        //*[@id="service-listing-section"]/div[2]/div/form/div[8]/div[4]/div/div/div/div/span
-
         //Enter Skill Exchange
         [FindsBy(How = How.XPath, Using = "//div[@class='form-wrapper']//input[@placeholder='Add new tag']")]
         private IWebElement SkillExchange { get; set; }
@@ -131,15 +130,21 @@ namespace MarsFramework.Pages
         [FindsBy(How = How.XPath, Using = "//input[@value='Save']")]
         private IWebElement Save { get; set; }
 
-       
+        //Find File upload button
+        [FindsBy(How = How.XPath, Using = "//*[@id='service-listing-section']/div[2]/div/form/div[9]/div/div[2]/section/div/label/div/span/i")]
+        private IWebElement FileUpload { get; set; }
 
         //Function to navigate Shareskill Page
         internal void GoToShareSkill()
         {
+            // GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.LinkText("Share Skill") , 10);
+            Thread.Sleep(10000);
             ShareSkillButton.Click();
         }
         internal void InputText(int dataRow)
         {
+          //  GlobalDefinitions.WaitForElement(GlobalDefinitions.driver, By.Name("Title"), 10);
+            Thread.Sleep(3000);
             //Enter all details
             Title.Clear();
             Title.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Title"));
@@ -150,6 +155,7 @@ namespace MarsFramework.Pages
 
         internal void InputDetails(int dataRow)
         {
+
             CategoryDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Category"));
             SubCategoryDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "SubCategory"));
             Tags.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Tags") + Keys.Enter);
@@ -187,36 +193,51 @@ namespace MarsFramework.Pages
             EndTimeDropDown.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Endtime") + Keys.Enter);
             SkillTradeExchange.Click();
             SkillExchange.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Skill-Exchange") + Keys.Enter);
-            ActiveOption.Click();
+           
+        }
+
+        internal void UploadFile()
+        {
+            FileUpload.Click();
+            // FileUpload.SendKeys("D:\\Automation\\MarsProject\\marsframework\\MarsFramework\\ExcelData\\Testing.exe");
+
+            AutoItX3 autoIt = new AutoItX3();
+            autoIt.WinActivate("Open");
+            Thread.Sleep(2000);
+            autoIt.Send(@"D:\Automation\MarsProject\marsframework\MarsFramework\ExcelData\QA.png");
+            autoIt.Send("{Enter}");
+
         }
 
         internal void EnterShareSkill(int dataRow)
         {
             GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "SkillDetails");
-            Thread.Sleep(3000);
+
+            //Wait for Element to find
             InputText(dataRow);
 
             InputDetails(dataRow);
 
             clickRadioBtn(dataRow);
-            AddDayTimeDetails(dataRow);            
+            AddDayTimeDetails(dataRow);
+            UploadFile();
+            ActiveOption.Click();
             Save.Click();
         }
 
         internal void EditDetails(int dataRow)
         {
             GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "SkillDetails");
+            Thread.Sleep(3000);
             SkillTradeCredit.Click();
             CreditAmount.Clear();
-            CreditAmount.SendKeys(GlobalDefinitions.ExcelLib.ReadData(3, "Credit"));
+            CreditAmount.SendKeys(GlobalDefinitions.ExcelLib.ReadData(dataRow, "Credit"));
         }
 
         internal void EditShareSkill(int dataRow)
         {
             GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "SkillDetails");
-            Thread.Sleep(5000);
             InputText(dataRow);
-            Thread.Sleep(2000);
             InputDetails(dataRow);
             EditDetails(dataRow);
             Save.Click();

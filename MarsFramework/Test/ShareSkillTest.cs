@@ -20,6 +20,10 @@ namespace MarsFramework.Test
             [Category("1.Add Record")]
             public void AddShareSkillDetails()
             {
+                ManageListings _manageListing = new ManageListings();
+                _manageListing.GoToManageList();
+                _manageListing.DeleteRecordIfExist(2);
+
                 Thread.Sleep(3000);
                 //Add Share skill details on page
                 ShareSkill _shareSkill = new ShareSkill();
@@ -27,8 +31,6 @@ namespace MarsFramework.Test
                 _shareSkill.EnterShareSkill(2);
 
                 //Check Record is add
-                ManageListings _manageListing = new ManageListings();
-                Thread.Sleep(3000);
                 _manageListing.GoToManageList();
                 _manageListing.CheckRecordAdded(2);
 
@@ -41,10 +43,13 @@ namespace MarsFramework.Test
                 //Navigate to ManageList
                 ManageListings _manageListing = new ManageListings();
                 _manageListing.GoToManageList();
+                Thread.Sleep(2000);
                 _manageListing.ClickOnEditBtn();
+                Thread.Sleep(3000);
 
                 ShareSkill _shareSkill = new ShareSkill();
                 _shareSkill.EditShareSkill(3);
+
                 _manageListing.GoToManageList();
                 _manageListing.CheckRecordEdited(3);
             }
