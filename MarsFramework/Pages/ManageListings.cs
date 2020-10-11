@@ -162,5 +162,27 @@ namespace MarsFramework.Pages
 
             }
         }
+
+        //Function to Delete Record Which is added automatically
+        internal void DeleteAutomatedRecord(int dataRow)
+        {
+            //Initialize Excel File
+            GlobalDefinitions.ExcelLib.PopulateInCollection(Base.ExcelPath, "SkillDetails");
+            string autoText = GlobalDefinitions.ExcelLib.ReadData(dataRow, "Title");
+            int CheckRow = GlobalDefinitions.driver.FindElements(By.XPath("//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr")).Count();
+
+            for (int i = 1; i <= CheckRow; i++)
+            {
+                IWebElement CheckString = GlobalDefinitions.driver.FindElement(By.XPath("//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr[" + i + "]/td[3]"));
+
+                if (CheckString.Text == autoText)
+                {
+                    GlobalDefinitions.driver.FindElement(By.XPath("//*[@id='listing-management-section']/div[2]/div[1]/div[1]/table/tbody/tr[" + i + "]/td[8]/div/button[3]/i")).Click();
+                    AlertYes.Click();
+                    break;
+                }
+            }
+
+        }
     }
 }

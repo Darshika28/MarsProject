@@ -60,8 +60,9 @@ namespace MarsFramework.Test
             {
                 ManageListings _manageListing = new ManageListings();
                 _manageListing.GoToManageList();
-                _manageListing.ClickOnDeleteBtn();
-                _manageListing.CheckRecordDeleted(3);
+             //   _manageListing.ClickOnDeleteBtn();
+                _manageListing.DeleteAutomatedRecord(2);
+                _manageListing.CheckRecordDeleted(2);
             }
         }
     }
