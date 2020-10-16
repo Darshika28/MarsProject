@@ -1,6 +1,7 @@
 ﻿using MarsFramework.Global;
 using MarsFramework.Pages;
 using NUnit.Framework;
+using RelevantCodes.ExtentReports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +13,17 @@ namespace MarsFramework.Test
 {
     class ShareSkillTest
     {
+
+        ExtentTest test;
+
         [TestFixture]
-        
         class User : Global.Base
         {
             [Test]
             [Category("1.Add Record")]
             public void AddShareSkillDetails()
             {
+                test = extent.StartTest("AddShareSkillDetails");
                 ManageListings _manageListing = new ManageListings();
                 _manageListing.GoToManageList();
                 _manageListing.DeleteRecordIfExist(2);
@@ -33,13 +37,15 @@ namespace MarsFramework.Test
                 //Check Record is add
                 _manageListing.GoToManageList();
                 _manageListing.CheckRecordAdded(2);
-
+               
             }
 
             [Test]
             [Category("2.Edit Record")]
             public void EditShareSkillDetails()
             {
+                test = extent.StartTest("EditShareSkillDetails");
+
                 //Navigate to ManageList
                 ManageListings _manageListing = new ManageListings();
                 _manageListing.GoToManageList();
@@ -58,9 +64,11 @@ namespace MarsFramework.Test
             [Category("3.Delete Record")]
             public void DeleteShareSkillDetails()
             {
+                test = extent.StartTest("DeleteShareSkillDetails");
+
                 ManageListings _manageListing = new ManageListings();
                 _manageListing.GoToManageList();
-             //   _manageListing.ClickOnDeleteBtn();
+              //  _manageListing.ClickOnDeleteBtn();
                 _manageListing.DeleteAutomatedRecord(2);
                 _manageListing.CheckRecordDeleted(2);
             }

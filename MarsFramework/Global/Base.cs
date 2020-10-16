@@ -15,8 +15,8 @@ namespace MarsFramework.Global
 
         public static int Browser = Int32.Parse(MarsResource.Browser);
         public static String ExcelPath = "D:\\Automation\\MarsProject\\marsframework\\MarsFramework\\ExcelData\\TestData.xlsx";
-        public static string ScreenshotPath = MarsResource.ScreenShotPath;
-        public static string ReportPath = MarsResource.ReportPath;
+        public static string ScreenshotPath = @"D:\Automation\MarsProject\marsframework\MarsFramework\TestReports\Screenshots\";
+        public static string ReportPath = "D:\\Automation\\MarsProject\\marsframework\\MarsFramework\\TestReports\\Screenshots\\report.html";
         public static string DockerPath = "http://192.168.99.100:5000";
         #endregion
 
@@ -50,7 +50,7 @@ namespace MarsFramework.Global
 
             extent = new ExtentReports(ReportPath, false, DisplayOrder.NewestFirst);
             extent.LoadConfig(MarsResource.ReportXMLPath);
-
+            
             #endregion
 
             if (MarsResource.IsLogin == "true")
@@ -80,14 +80,14 @@ namespace MarsFramework.Global
         [TearDown]
         public void TearDown()
         {
-            //// Screenshot
-            //String img = SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report");//AddScreenCapture(@"E:\Dropbox\VisualStudio\Projects\Beehive\TestReports\ScreenShots\");
-            //test.Log(LogStatus.Info, "Image example: " + img);
-            //// end test. (Reports)
-            //extent.EndTest(test);
-            //// calling Flush writes everything to the log file (Reports)
-            //extent.Flush();
-            // Close the driver :)            
+            // Screenshot
+            String img = SaveScreenShotClass.SaveScreenshot(GlobalDefinitions.driver, "Report");//AddScreenCapture(@"E:\Dropbox\VisualStudio\Projects\Beehive\TestReports\ScreenShots\");
+            test.Log(LogStatus.Info, "Image example: " + img);
+            // end test. (Reports)
+            extent.EndTest(test);
+            // calling Flush writes everything to the log file (Reports)
+            extent.Flush();
+           // Close the driver:)            
             GlobalDefinitions.driver.Close();
             GlobalDefinitions.driver.Quit();
         }
