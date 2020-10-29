@@ -69,11 +69,11 @@ namespace MarsFramework.Global
         public void SetUp()
         {
             ////check the url of chrome
-            //if(GlobalDefinitions.driver.Url != Base.DockerPath)
-            //{
-            //    GlobalDefinitions.driver.Navigate().GoToUrl("http://192.168.99.100:5000");
+            if(GlobalDefinitions.driver.Url != Base.DockerPath)
+            {
+                GlobalDefinitions.driver.Navigate().GoToUrl(Base.DockerPath);
              
-            //}
+            }
         }
 
 
